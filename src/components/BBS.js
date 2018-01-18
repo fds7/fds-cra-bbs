@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import * as firebase from 'firebase';
 
+import LoginScreen from './LoginScreen';
+
 export default class BBS extends Component {
   state = {
     page: 'login'
@@ -18,7 +20,13 @@ export default class BBS extends Component {
   }
   render() {
     return (
-      <div>BBS</div>
+      <div>
+        {
+          this.state.page === 'login'
+          ? <Login />
+          : null
+        }
+      </div>
     )
   }
 }

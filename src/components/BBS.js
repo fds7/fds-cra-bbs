@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import * as firebase from 'firebase';
 
 import LoginScreen from './LoginScreen';
+import ArticleListScreen from './ArticleListScreen';
 
 export default class BBS extends Component {
   state = {
@@ -17,13 +18,26 @@ export default class BBS extends Component {
       messagingSenderId: "966283711333"
     };
     firebase.initializeApp(config);
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({
+          page: 'list'
+        });
+      } else {
+        this.setState({
+          page: 'login'
+        });
+      }
+    });
   }
   render() {
     return (
       <div>
         {
           this.state.page === 'login'
-          ? <Login />
+          ? <LoginScreen />
+          : this.state.page === 'list'
+          ? <ArticleListScreen />
           : null
         }
       </div>

@@ -29,12 +29,17 @@ export default class NavBar extends Component {
   handleLogoutClick = () => {
     firebase.auth().signOut();
   }
+
+  handleNickNameClick = e => {
+    this.props.onNickNameClick();
+  }
+
   render() {
     return (
       <Wrap>
         <InnerLeft>BBS</InnerLeft>
         <LogOutButton onClick={this.handleLogoutClick}>로그아웃</LogOutButton>
-        <NickName>{this.props.uid}</NickName>
+        <NickName onClick={this.handleNickNameClick}>{this.props.uid}</NickName>
       </Wrap>
     )
   }

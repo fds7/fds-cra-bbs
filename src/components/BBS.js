@@ -3,10 +3,16 @@ import * as firebase from 'firebase';
 
 import LoginScreen from './LoginScreen';
 import ArticleListScreen from './ArticleListScreen';
+import AccountScreen from './AccountScreen';
 
 export default class BBS extends Component {
   state = {
     page: 'login'
+  }
+  pageToAccount = () => {
+    this.setState({
+      page: 'account'
+    });
   }
   componentDidMount() {
     const config = {
@@ -38,7 +44,9 @@ export default class BBS extends Component {
           this.state.page === 'login'
           ? <LoginScreen />
           : this.state.page === 'list'
-          ? <ArticleListScreen uid={this.state.uid} />
+          ? <ArticleListScreen onNickNameClick={this.pageToAccount} uid={this.state.uid} />
+          : this.state.page === 'account'
+          ? <AccountScreen />
           : null
         }
       </div>

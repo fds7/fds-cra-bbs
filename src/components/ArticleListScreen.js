@@ -3,10 +3,10 @@ import NavBar from './NavBar';
 
 export default class ArticleListScreen extends Component {
   render() {
-    const {uid} = this.props;
+    const {uid, onNickNameClick} = this.props;
     return (
       <div>
-        <NavBar uid={uid} />
+        <NavBar uid={uid} onNickNameClick={onNickNameClick} />
         게시글 목록
       </div>
     )

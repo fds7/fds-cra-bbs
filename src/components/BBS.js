@@ -21,7 +21,8 @@ export default class BBS extends Component {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.setState({
-          page: 'list'
+          page: 'list',
+          uid: user.uid
         });
       } else {
         this.setState({
@@ -37,7 +38,7 @@ export default class BBS extends Component {
           this.state.page === 'login'
           ? <LoginScreen />
           : this.state.page === 'list'
-          ? <ArticleListScreen />
+          ? <ArticleListScreen uid={this.state.uid} />
           : null
         }
       </div>

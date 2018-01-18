@@ -21,6 +21,10 @@ const LogOutButton = styled.button`
   background-color: white;
 `;
 
+const NickName = styled.a`
+  color: white;
+`;
+
 export default class NavBar extends Component {
   handleLogoutClick = () => {
     firebase.auth().signOut();
@@ -30,6 +34,7 @@ export default class NavBar extends Component {
       <Wrap>
         <InnerLeft>BBS</InnerLeft>
         <LogOutButton onClick={this.handleLogoutClick}>로그아웃</LogOutButton>
+        <NickName>{this.props.uid}</NickName>
       </Wrap>
     )
   }

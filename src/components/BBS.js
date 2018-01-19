@@ -62,7 +62,7 @@ export default class BBS extends Component {
           ? <ArticleListScreen onNickNameClick={this.pageToAccount} nickName={nickName} />
           : this.state.page === 'account'
           ? <AccountScreen onFormSubmit={this.saveNickName} nickName={nickName} />
-          : null
+          : 'Loading...'
         }
       </div>
     )

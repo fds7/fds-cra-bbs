@@ -7,7 +7,8 @@ import AccountScreen from './AccountScreen';
 
 export default class BBS extends Component {
   state = {
-    page: null
+    page: null,
+    articles: null
   }
   pageToAccount = () => {
     this.setState({
@@ -35,6 +36,7 @@ export default class BBS extends Component {
             nickName: snapshot.val() || user.uid
           });
         });
+        this.fetchArticles();
       } else {
         this.setState({
           page: 'login'
@@ -51,15 +53,34 @@ export default class BBS extends Component {
     });
   }
 
+  fetchArticles = async () => {
+    const snapshot = await firebase.database().ref('articles').once('value');
+    const articlesObj = snapshot.val();
+    const articles = (
+      articlesObj == null
+      ? []
+      : Object.entries(articlesObj).map(([articleId, article]) => ({
+          articleId,
+          ...article
+        }))
+    );
+    this.setState({
+      articles
+    });
+  }
+
   render() {
-    const {nickName} = this.state;
+    const {nickName, articles} = this.state;
     return (
       <div>
         {
           this.state.page === 'login'
           ? <LoginScreen />
           : this.state.page === 'list'
-          ? <ArticleListScreen onNickNameClick={this.pageToAccount} nickName={nickName} />
+          ? <ArticleListScreen
+            onNickNameClick={this.pageToAccount}
+            nickName={nickName}
+            articles={articles} />
           : this.state.page === 'account'
           ? <AccountScreen onFormSubmit={this.saveNickName} nickName={nickName} />
           : 'Loading...'

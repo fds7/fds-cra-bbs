@@ -4,6 +4,7 @@ import * as firebase from 'firebase';
 import LoginScreen from './LoginScreen';
 import ArticleListScreen from './ArticleListScreen';
 import AccountScreen from './AccountScreen';
+import ArticleScreen from './ArticleScreen';
 
 export default class BBS extends Component {
   state = {
@@ -53,6 +54,21 @@ export default class BBS extends Component {
     });
   }
 
+  viewArticle = async articleId => {
+    const {uid} = this.state;
+    const articleSnapshot = await firebase.database().ref(`/articles/${articleId}`).once('value');
+    const articleData = articleSnapshot.val();
+    const nickNameSnapshot = await firebase.database().ref(`/users/${uid}/nickName`).once('value');
+    const author = nickNameSnapshot.val();
+    this.setState({
+      page: 'article',
+      article: {
+        author,
+        ...articleData
+      }
+    });
+  }
+
   fetchArticles = async () => {
     const snapshot = await firebase.database().ref('articles').once('value');
     const articlesObj = snapshot.val();
@@ -70,19 +86,26 @@ export default class BBS extends Component {
   }
 
   render() {
-    const {nickName, articles} = this.state;
+    const {nickName, articles, page, article} = this.state;
     return (
       <div>
         {
-          this.state.page === 'login'
+          page === 'login'
           ? <LoginScreen />
-          : this.state.page === 'list'
+          : page === 'list'
           ? <ArticleListScreen
             onNickNameClick={this.pageToAccount}
+            onArticleItemClick={this.viewArticle}
             nickName={nickName}
             articles={articles} />
-          : this.state.page === 'account'
-          ? <AccountScreen onFormSubmit={this.saveNickName} nickName={nickName} />
+          : page === 'account'
+          ? <AccountScreen
+            onFormSubmit={this.saveNickName}
+            nickName={nickName} />
+          : page === 'article'
+          ? <ArticleScreen
+            {...article}
+            nickName={nickName} />
           : 'Loading...'
         }
       </div>

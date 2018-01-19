@@ -1,7 +1,17 @@
 import React, {Component} from 'react';
+import styled from 'styled-components';
+
 import NavBar from './NavBar';
 
+const ArticleItem = styled.div`
+  color: green;
+  cursor: pointer;
+`;
+
 export default class ArticleListScreen extends Component {
+  handleArticleItemClick = articleId => {
+    this.props.onArticleItemClick && this.props.onArticleItemClick(articleId);
+  }
   render() {
     const {nickName, onNickNameClick, articles} = this.props;
     return (
@@ -13,7 +23,10 @@ export default class ArticleListScreen extends Component {
             ? 'Loading...'
             : articles.length > 0
             ? articles.map(({title, content, createdAt, articleId}) => (
-              <div key={articleId}>{`${createdAt} - ${title} - ${content}`}</div>
+              <ArticleItem
+                key={articleId}
+                onClick={() => this.handleArticleItemClick(articleId)}
+              >{`${createdAt} - ${title} - ${content}`}</ArticleItem>
             ))
             : '게시글이 없습니다.'
           }

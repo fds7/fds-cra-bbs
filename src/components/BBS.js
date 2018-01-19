@@ -7,7 +7,7 @@ import AccountScreen from './AccountScreen';
 
 export default class BBS extends Component {
   state = {
-    page: 'login'
+    page: null
   }
   pageToAccount = () => {
     this.setState({
@@ -30,6 +30,11 @@ export default class BBS extends Component {
           page: 'list',
           uid: user.uid
         });
+        firebase.database().ref(`users/${user.uid}/nickName`).on('value', snapshot => {
+          this.setState({
+            nickName: snapshot.val() || user.uid
+          });
+        });
       } else {
         this.setState({
           page: 'login'
@@ -37,16 +42,26 @@ export default class BBS extends Component {
       }
     });
   }
+
+  saveNickName = async ({nickName}) => {
+    const {uid} = this.state;
+    await firebase.database().ref(`users/${uid}/nickName`).set(nickName);
+    this.setState({
+      page: 'list'
+    });
+  }
+
   render() {
+    const {nickName} = this.state;
     return (
       <div>
         {
           this.state.page === 'login'
           ? <LoginScreen />
           : this.state.page === 'list'
-          ? <ArticleListScreen onNickNameClick={this.pageToAccount} uid={this.state.uid} />
+          ? <ArticleListScreen onNickNameClick={this.pageToAccount} nickName={nickName} />
           : this.state.page === 'account'
-          ? <AccountScreen />
+          ? <AccountScreen onFormSubmit={this.saveNickName} nickName={nickName} />
           : null
         }
       </div>

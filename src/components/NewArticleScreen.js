@@ -44,10 +44,10 @@ export default class NewArticleScreen extends Component {
     }
   }
   render() {
-    const {nickName} = this.props;
+    const {nickName, onNickNameClick} = this.props;
     return (
       <div>
-        <NavBar nickName={nickName} />
+        <NavBar nickName={nickName} onNickNameClick={onNickNameClick} />
         <ArticleForm onSubmit={this.handleSubmit}>
           <fieldset>
             <Label>

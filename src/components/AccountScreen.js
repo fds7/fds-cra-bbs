@@ -57,11 +57,11 @@ export default class AccountScreen extends Component {
     this.props.onFormSubmit && this.props.onFormSubmit(data);
   }
   render() {
-    const {nickName} = this.props;
+    const {nickName, onNickNameClick} = this.props;
     const {formDisabled} = this.state;
     return (
       <Wrap>
-        <NavBar nickName={nickName} />
+        <NavBar nickName={nickName} onNickNameClick={onNickNameClick} />
         <Form onSubmit={this.handleSubmit}>
           <fieldset disabled={formDisabled}>
             <Label>

@@ -5,6 +5,7 @@ import LoginScreen from './LoginScreen';
 import ArticleListScreen from './ArticleListScreen';
 import AccountScreen from './AccountScreen';
 import ArticleScreen from './ArticleScreen';
+import NewArticleScreen from './NewArticleScreen';
 
 export default class BBS extends Component {
   state = {
@@ -14,6 +15,11 @@ export default class BBS extends Component {
   pageToAccount = () => {
     this.setState({
       page: 'account'
+    });
+  }
+  pageToNewArticle = () => {
+    this.setState({
+      page: 'new-article'
     });
   }
   componentDidMount() {
@@ -54,23 +60,42 @@ export default class BBS extends Component {
     });
   }
 
+  saveNewArticle = async ({title, content}) => {
+    const {uid} = this.state;
+    const {key} = await firebase.database().ref(`articles`).push({
+      title,
+      uid,
+      createdAt: firebase.database.ServerValue.TIMESTAMP
+    });
+    await firebase.database().ref(`contents/${key}`).set(content);
+    await this.fetchArticles();
+    this.setState({
+      page: 'list'
+    });
+  }
+
   viewArticle = async articleId => {
     const {uid} = this.state;
     const articleSnapshot = await firebase.database().ref(`/articles/${articleId}`).once('value');
     const articleData = articleSnapshot.val();
-    const nickNameSnapshot = await firebase.database().ref(`/users/${uid}/nickName`).once('value');
+    const nickNamePromise = firebase.database().ref(`/users/${uid}/nickName`).once('value');
+    const contentPromise = firebase.database().ref(`/contents/${articleId}`).once('value');
+    const [nickNameSnapshot, contentSnapshot] = await Promise.all([nickNamePromise, contentPromise]);
     const author = nickNameSnapshot.val();
+    const content = contentSnapshot.val();
     this.setState({
       page: 'article',
       article: {
         author,
+        content,
         ...articleData
       }
     });
   }
 
   fetchArticles = async () => {
-    const snapshot = await firebase.database().ref('articles').once('value');
+    const snapshot = await firebase.database().ref('/articles').once('value');
+    console.log(snapshot);
     const articlesObj = snapshot.val();
     const articles = (
       articlesObj == null
@@ -80,6 +105,18 @@ export default class BBS extends Component {
           ...article
         }))
     );
+
+    // nickName 가져오기
+    const uidSet = new Set(articles.map(a => a.uid));
+    const uidPromises = Array.from(uidSet).map(async uid => {
+      const nickNameSnapshot = await firebase.database().ref(`users/${uid}/nickName`).once(`value`);
+      return [uid, nickNameSnapshot.val()];
+    })
+    const uidMapArr = await Promise.all(uidPromises);
+    const uidMap = new Map(uidMapArr);
+    articles.forEach(article => {
+      article.author = uidMap.get(article.uid);
+    });
     this.setState({
       articles
     });
@@ -96,6 +133,7 @@ export default class BBS extends Component {
           ? <ArticleListScreen
             onNickNameClick={this.pageToAccount}
             onArticleItemClick={this.viewArticle}
+            onNewArticleClick={this.pageToNewArticle}
             nickName={nickName}
             articles={articles} />
           : page === 'account'
@@ -105,6 +143,10 @@ export default class BBS extends Component {
           : page === 'article'
           ? <ArticleScreen
             {...article}
+            nickName={nickName} />
+          : page === 'new-article'
+          ? <NewArticleScreen
+            onFormSubmit={this.saveNewArticle}
             nickName={nickName} />
           : 'Loading...'
         }

@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
+import * as moment from 'moment';
+import 'moment/locale/ko';
+
 import NavBar from './NavBar';
 
 const Title = styled.h1``;
@@ -18,7 +21,7 @@ export default class ArticleScreen extends Component {
         <NavBar nickName={nickName} onNickNameClick={onNickNameClick}/>
         <div>{author}</div>
         <Title>{title}</Title>
-        <div>{createdAt}</div>
+        <div>{moment(createdAt).locale('ko').fromNow()}</div>
         <Content>{content}</Content>
       </div>
     );

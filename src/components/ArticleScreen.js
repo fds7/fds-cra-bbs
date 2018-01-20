@@ -4,6 +4,11 @@ import NavBar from './NavBar';
 
 const Title = styled.h1``;
 
+const Content = styled.pre`
+  font-family: sans-serif;
+  white-space: pre-wrap;
+`;
+
 export default class ArticleScreen extends Component {
 
   render() {
@@ -14,7 +19,7 @@ export default class ArticleScreen extends Component {
         <div>{author}</div>
         <Title>{title}</Title>
         <div>{createdAt}</div>
-        <div>{content}</div>
+        <Content>{content}</Content>
       </div>
     );
   }

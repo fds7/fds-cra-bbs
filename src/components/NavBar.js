@@ -11,8 +11,13 @@ const Wrap = styled.nav`
 
 const InnerLeft = styled.div`
   flex-grow: 1;
-  color: white;
+`;
+
+const Logo = styled.div`
+  display: inline-block;
   font-size: 2em;
+  color: white;
+  cursor: pointer;
 `;
 
 const LogOutButton = styled.button`
@@ -22,6 +27,7 @@ const LogOutButton = styled.button`
 `;
 
 const NickName = styled.a`
+  margin-left: 1em;
   color: white;
 `;
 
@@ -30,15 +36,21 @@ export default class NavBar extends Component {
     firebase.auth().signOut();
   }
 
-  handleNickNameClick = e => {
+  handleNickNameClick = () => {
     this.props.onNickNameClick();
+  }
+
+  handleLogoClick = () => {
+    this.props.onLogoClick();
   }
 
   render() {
     const {nickName} = this.props;
     return (
       <Wrap>
-        <InnerLeft>BBS</InnerLeft>
+        <InnerLeft>
+          <Logo onClick={this.handleLogoClick}>BBS</Logo>
+        </InnerLeft>
         <LogOutButton onClick={this.handleLogoutClick}>로그아웃</LogOutButton>
         <NickName onClick={this.handleNickNameClick}>{nickName}</NickName>
       </Wrap>

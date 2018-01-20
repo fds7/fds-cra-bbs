@@ -23,11 +23,17 @@ export default class ArticleListScreen extends Component {
       articles,
       onNickNameClick,
       onNewArticleClick,
+      onLogoClick
     } = this.props;
     return (
       <div>
-        <NavBar nickName={nickName} onNickNameClick={onNickNameClick} />
-        <NewArticleButton onClick={onNewArticleClick}>새 게시글</NewArticleButton>
+        <NavBar
+          nickName={nickName}
+          onNickNameClick={onNickNameClick}
+          onLogoClick={onLogoClick} />
+        <NewArticleButton onClick={onNewArticleClick}>
+          새 게시글
+        </NewArticleButton>
         <div>
           {
             articles == null

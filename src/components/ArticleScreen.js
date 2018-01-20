@@ -15,10 +15,21 @@ const Content = styled.pre`
 export default class ArticleScreen extends Component {
 
   render() {
-    const {author, title, content, createdAt, nickName, onNickNameClick} = this.props;
+    const {
+      author,
+      title,
+      content,
+      createdAt,
+      nickName,
+      onNickNameClick,
+      onLogoClick
+    } = this.props;
     return (
       <div>
-        <NavBar nickName={nickName} onNickNameClick={onNickNameClick}/>
+        <NavBar
+          nickName={nickName}
+          onNickNameClick={onNickNameClick}
+          onLogoClick={onLogoClick} />
         <div>{author}</div>
         <Title>{title}</Title>
         <div>{moment(createdAt).locale('ko').fromNow()}</div>

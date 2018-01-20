@@ -140,22 +140,26 @@ export default class BBS extends Component {
             onNickNameClick={this.pageToAccount}
             onArticleItemClick={this.viewArticle}
             onNewArticleClick={this.pageToNewArticle}
+            onLogoClick={this.pageToList}
             nickName={nickName}
             articles={articles} />
           : page === 'account'
           ? <AccountScreen
             onNickNameClick={this.pageToAccount}
+            onLogoClick={this.pageToList}
             onFormSubmit={this.saveNickName}
             nickName={nickName} />
           : page === 'article'
           ? <ArticleScreen
             {...article}
             onNickNameClick={this.pageToAccount}
+            onLogoClick={this.pageToList}
             nickName={nickName} />
           : page === 'new-article'
           ? <NewArticleScreen
             onFormSubmit={this.saveNewArticle}
             onNickNameClick={this.pageToAccount}
+            onLogoClick={this.pageToList}
             nickName={nickName} />
           : 'Loading...'
         }

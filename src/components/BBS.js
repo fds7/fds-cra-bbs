@@ -32,13 +32,14 @@ export default class BBS extends Component {
       messagingSenderId: "966283711333"
     };
     firebase.initializeApp(config);
+    this.db = firebase.database();
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.setState({
           page: 'list',
           uid: user.uid
         });
-        firebase.database().ref(`users/${user.uid}/nickName`).on('value', snapshot => {
+        this.db.ref(`users/${user.uid}/nickName`).on('value', snapshot => {
           this.setState({
             nickName: snapshot.val() || user.uid
           });
@@ -54,7 +55,7 @@ export default class BBS extends Component {
 
   saveNickName = async ({nickName}) => {
     const {uid} = this.state;
-    await firebase.database().ref(`users/${uid}/nickName`).set(nickName);
+    await this.db.ref(`users/${uid}/nickName`).set(nickName);
     this.setState({
       page: 'list'
     });
@@ -62,12 +63,12 @@ export default class BBS extends Component {
 
   saveNewArticle = async ({title, content}) => {
     const {uid} = this.state;
-    const {key} = await firebase.database().ref(`articles`).push({
+    const {key} = await this.db.ref(`articles`).push({
       title,
       uid,
       createdAt: firebase.database.ServerValue.TIMESTAMP
     });
-    await firebase.database().ref(`contents/${key}`).set(content);
+    await this.db.ref(`contents/${key}`).set(content);
     await this.fetchArticles();
     this.setState({
       page: 'list'
@@ -76,10 +77,10 @@ export default class BBS extends Component {
 
   viewArticle = async articleId => {
     const {uid} = this.state;
-    const articleSnapshot = await firebase.database().ref(`/articles/${articleId}`).once('value');
+    const articleSnapshot = await this.db.ref(`/articles/${articleId}`).once('value');
     const articleData = articleSnapshot.val();
-    const nickNamePromise = firebase.database().ref(`/users/${uid}/nickName`).once('value');
-    const contentPromise = firebase.database().ref(`/contents/${articleId}`).once('value');
+    const nickNamePromise = this.db.ref(`/users/${uid}/nickName`).once('value');
+    const contentPromise = this.db.ref(`/contents/${articleId}`).once('value');
     const [nickNameSnapshot, contentSnapshot] = await Promise.all([nickNamePromise, contentPromise]);
     const author = nickNameSnapshot.val();
     const content = contentSnapshot.val();
@@ -94,7 +95,7 @@ export default class BBS extends Component {
   }
 
   fetchArticles = async () => {
-    const snapshot = await firebase.database().ref('/articles').once('value');
+    const snapshot = await this.db.ref('/articles').once('value');
     console.log(snapshot);
     const articlesObj = snapshot.val();
     const articles = (
@@ -109,7 +110,7 @@ export default class BBS extends Component {
     // nickName 가져오기
     const uidSet = new Set(articles.map(a => a.uid));
     const uidPromises = Array.from(uidSet).map(async uid => {
-      const nickNameSnapshot = await firebase.database().ref(`users/${uid}/nickName`).once(`value`);
+      const nickNameSnapshot = await this.db.ref(`users/${uid}/nickName`).once(`value`);
       return [uid, nickNameSnapshot.val()];
     })
     const uidMapArr = await Promise.all(uidPromises);

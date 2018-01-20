@@ -42,6 +42,6 @@ export default class NavBar extends Component {
         <LogOutButton onClick={this.handleLogoutClick}>로그아웃</LogOutButton>
         <NickName onClick={this.handleNickNameClick}>{nickName}</NickName>
       </Wrap>
-    )
+    );
   }
 }

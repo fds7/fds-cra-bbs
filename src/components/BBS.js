@@ -22,6 +22,11 @@ export default class BBS extends Component {
       page: 'new-article'
     });
   }
+  pageToList = () => {
+    this.setState({
+      page: 'list'
+    });
+  }
   componentDidMount() {
     const config = {
       apiKey: "AIzaSyC5bvpoKyfa3qwTxhSt0PxgQZI2dI3QbZc",
@@ -112,7 +117,7 @@ export default class BBS extends Component {
     const uidPromises = Array.from(uidSet).map(async uid => {
       const nickNameSnapshot = await this.db.ref(`users/${uid}/nickName`).once(`value`);
       return [uid, nickNameSnapshot.val()];
-    })
+    });
     const uidMapArr = await Promise.all(uidPromises);
     const uidMap = new Map(uidMapArr);
     articles.forEach(article => {
@@ -152,6 +157,6 @@ export default class BBS extends Component {
           : 'Loading...'
         }
       </div>
-    )
+    );
   }
 }

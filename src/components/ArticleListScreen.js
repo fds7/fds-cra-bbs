@@ -10,7 +10,7 @@ const ArticleItem = styled.div`
 
 const NewArticleButton = styled.button`
   background-color: skyblue;
-`
+`;
 
 export default class ArticleListScreen extends Component {
   handleArticleItemClick = articleId => {
@@ -42,6 +42,6 @@ export default class ArticleListScreen extends Component {
           }
         </div>
       </div>
-    )
+    );
   }
 }

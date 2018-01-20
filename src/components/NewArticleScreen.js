@@ -5,7 +5,7 @@ import NavBar from './NavBar';
 
 const ArticleForm = styled.form`
   padding: 1em;
-`
+`;
 
 const Label = styled.label`
   display: block;
@@ -62,6 +62,6 @@ export default class NewArticleScreen extends Component {
           </fieldset>
         </ArticleForm>
       </div>
-    )
+    );
   }
 }

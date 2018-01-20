@@ -72,6 +72,6 @@ export default class AccountScreen extends Component {
           </fieldset>
         </Form>
       </Wrap>
-    )
+    );
   }
 }

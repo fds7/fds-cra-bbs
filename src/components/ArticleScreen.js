@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import NavBar from './NavBar';
 
+const Title = styled.h1``;
+
 export default class ArticleScreen extends Component {
 
   render() {
@@ -10,7 +12,7 @@ export default class ArticleScreen extends Component {
       <div>
         <NavBar nickName={nickName} />
         <div>{author}</div>
-        <div>{title}</div>
+        <Title>{title}</Title>
         <div>{createdAt}</div>
         <div>{content}</div>
       </div>

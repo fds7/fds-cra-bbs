@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
-
+import * as moment from 'moment';
+import 'moment/locale/ko';
 import NavBar from './NavBar';
 
 const ArticleItem = styled.div`
@@ -36,7 +37,7 @@ export default class ArticleListScreen extends Component {
               <ArticleItem
                 key={articleId}
                 onClick={() => this.handleArticleItemClick(articleId)}
-              >{`${createdAt} - ${author} - ${title}`}</ArticleItem>
+              >{`${moment(createdAt).locale('ko').fromNow()} - ${author} - ${title}`}</ArticleItem>
             ))
             : '게시글이 없습니다.'
           }

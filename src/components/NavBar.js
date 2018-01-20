@@ -29,6 +29,7 @@ const LogOutButton = styled.button`
 const NickName = styled.a`
   margin-left: 1em;
   color: white;
+  cursor: pointer;
 `;
 
 export default class NavBar extends Component {

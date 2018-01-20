@@ -66,7 +66,7 @@ export default class AccountScreen extends Component {
           <fieldset disabled={formDisabled}>
             <Label>
               별명
-              <NickNameInput name="nickName" />
+              <NickNameInput defaultValue={nickName} name="nickName" />
             </Label>
             <SaveButton>저장</SaveButton>
           </fieldset>

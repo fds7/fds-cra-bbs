@@ -81,14 +81,14 @@ export default class BBS extends Component {
   }
 
   viewArticle = async articleId => {
-    const {uid} = this.state;
     const articleSnapshot = await this.db.ref(`/articles/${articleId}`).once('value');
     const articleData = articleSnapshot.val();
-    const nickNamePromise = this.db.ref(`/users/${uid}/nickName`).once('value');
+    const nickNamePromise = this.db.ref(`/users/${articleData.uid}/nickName`).once('value');
     const contentPromise = this.db.ref(`/contents/${articleId}`).once('value');
     const [nickNameSnapshot, contentSnapshot] = await Promise.all([nickNamePromise, contentPromise]);
     const author = nickNameSnapshot.val();
     const content = contentSnapshot.val();
+    console.log(author);
     this.setState({
       page: 'article',
       article: {
@@ -123,6 +123,7 @@ export default class BBS extends Component {
     articles.forEach(article => {
       article.author = uidMap.get(article.uid);
     });
+    console.log(articles);
     this.setState({
       articles
     });

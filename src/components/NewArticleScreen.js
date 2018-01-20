@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 
 import NavBar from './NavBar';
+import MainWrap from './MainWrap';
 
 const ArticleForm = styled.form`
   padding: 1em;
@@ -55,19 +56,21 @@ export default class NewArticleScreen extends Component {
           nickName={nickName}
           onNickNameClick={onNickNameClick}
           onLogoClick={onLogoClick} />
-        <ArticleForm onSubmit={this.handleSubmit}>
-          <fieldset>
-            <Label>
-              제목
-              <TitleInput name="title" onKeyPress={this.handleKeyPress} />
-            </Label>
-            <Label>
-              내용
-              <ContentTextArea name="content" />
-            </Label>
-            <SubmitButton>저장</SubmitButton>
-          </fieldset>
-        </ArticleForm>
+        <MainWrap>
+          <ArticleForm onSubmit={this.handleSubmit}>
+            <fieldset>
+              <Label>
+                제목
+                <TitleInput name="title" onKeyPress={this.handleKeyPress} />
+              </Label>
+              <Label>
+                내용
+                <ContentTextArea name="content" />
+              </Label>
+              <SubmitButton>저장</SubmitButton>
+            </fieldset>
+          </ArticleForm>
+        </MainWrap>
       </div>
     );
   }

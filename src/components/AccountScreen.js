@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 
 import NavBar from './NavBar';
+import MainWrap from './MainWrap';
 
 const Wrap = styled.div``;
 
@@ -65,15 +66,17 @@ export default class AccountScreen extends Component {
           nickName={nickName}
           onNickNameClick={onNickNameClick}
           onLogoClick={onLogoClick} />
-        <Form onSubmit={this.handleSubmit}>
-          <fieldset disabled={formDisabled}>
-            <Label>
-              별명
-              <NickNameInput defaultValue={nickName} name="nickName" />
-            </Label>
-            <SaveButton>저장</SaveButton>
-          </fieldset>
-        </Form>
+        <MainWrap>
+          <Form onSubmit={this.handleSubmit}>
+            <fieldset disabled={formDisabled}>
+              <Label>
+                별명
+                <NickNameInput defaultValue={nickName} name="nickName" />
+              </Label>
+              <SaveButton>저장</SaveButton>
+            </fieldset>
+          </Form>
+        </MainWrap>
       </Wrap>
     );
   }

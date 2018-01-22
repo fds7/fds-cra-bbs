@@ -24,11 +24,13 @@ export default class BBS extends Component {
       messagingSenderId: "966283711333"
     };
     firebase.initializeApp(config);
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(async user => {
       if (user) {
+        const snapshot = await firebase.database().ref(`users/${user.uid}/nickName`).once('value');
         this.setState({
           page: 'list',
-          uid: user.uid
+          uid: user.uid,
+          nickName: snapshot.val()
         });
       } else {
         this.setState({
@@ -37,16 +39,30 @@ export default class BBS extends Component {
       }
     });
   }
+  saveNickName = async nickName => {
+    const {uid} = this.state;
+    await firebase.database().ref(`users/${uid}/nickName`).set(nickName);
+    this.setState({
+      nickName,
+      page: 'list'
+    });
+  }
   render() {
+    const {nickName, uid} = this.state;
     return (
       <div>
         {
           this.state.page === 'login'
           ? <LoginScreen />
           : this.state.page === 'list'
-          ? <ArticleListScreen onNickNameClick={this.pageToAccount} uid={this.state.uid} />
+          ? <ArticleListScreen
+              onNickNameClick={this.pageToAccount}
+              nickName={nickName || uid} />
           : this.state.page === 'account'
-          ? <AccountScreen />
+          ? <AccountScreen
+              onNickNameClick={this.pageToAccount}
+              nickName={nickName || uid}
+              onNickNameSubmit={this.saveNickName} />
           : null
         }
       </div>
